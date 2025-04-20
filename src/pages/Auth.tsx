@@ -1,11 +1,11 @@
-
 import React, { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, Mail, Lock, UserPlus, LogIn, Google } from "lucide-react";
+import { Loader2, Mail, Lock, UserPlus, LogIn } from "lucide-react";
+import { google as Google } from "lucide-react";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 
 const AuthPage = () => {
