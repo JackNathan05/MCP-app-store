@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, Mail, Lock, UserPlus, LogIn, Google } from "lucide-react";
+import { Loader2, Mail, Lock, UserPlus, LogIn } from "lucide-react";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
+import { GoogleIcon } from "@/components/ui/GoogleIcon";
 
 const AuthPage = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -107,7 +108,7 @@ const AuthPage = () => {
           onClick={handleGoogle}
           disabled={busy}
         >
-          <Google className="h-5 w-5" /> Continue with Google
+          <GoogleIcon className="h-5 w-5" /> Continue with Google
         </Button>
         <div className="flex items-center justify-between mt-2">
           <span className="text-sm">
