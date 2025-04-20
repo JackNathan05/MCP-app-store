@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, Mail, Lock, UserPlus, LogIn, Github, Google } from "lucide-react";
+import { Loader2, Mail, Lock, UserPlus, LogIn, Google } from "lucide-react";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 
 const AuthPage = () => {
@@ -80,7 +80,6 @@ const AuthPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
-              icon={<Mail className="h-4 w-4"/>}
             />
           </div>
           <div>
@@ -92,7 +91,6 @@ const AuthPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete={isSignUp ? "new-password" : "current-password"}
-              icon={<Lock className="h-4 w-4"/>}
             />
           </div>
           <Button type="submit" className="w-full mt-2" disabled={busy}>
