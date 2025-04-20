@@ -1,7 +1,6 @@
-
 // MCP App Store Directory Page
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useNavigate } from "react";
 import McpAgentCard, { McpAgent } from "@/components/McpAgentCard";
 import TagFilter from "@/components/TagFilter";
 import SearchBar from "@/components/SearchBar";
@@ -62,6 +61,7 @@ const ALL_TAGS = Array.from(
 const Index = () => {
   const [search, setSearch] = useState("");
   const [activeTags, setActiveTags] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   const filteredAgents = useMemo(() => {
     let list = AGENTS;
@@ -89,6 +89,8 @@ const Index = () => {
     );
   };
 
+  const slugify = (name: string) => name.toLowerCase().replace(/\s+/g, "-");
+
   return (
     <div className="min-h-screen bg-gray-50 py-10 flex flex-col items-center">
       <div className="mb-6">
@@ -110,7 +112,21 @@ const Index = () => {
           </div>
         ) : (
           filteredAgents.map(agent => (
-            <McpAgentCard key={agent.name} agent={agent} />
+            <div
+              key={agent.name}
+              className="cursor-pointer transition hover:scale-[1.02]"
+              onClick={() => navigate(`/agent/${slugify(agent.name)}`)}
+              tabIndex={0}
+              role="button"
+              onKeyDown={e => {
+                if (e.key === "Enter" || e.key === " ") {
+                  navigate(`/agent/${slugify(agent.name)}`);
+                }
+              }}
+              aria-label={`View details for ${agent.name}`}
+            >
+              <McpAgentCard agent={agent} />
+            </div>
           ))
         )}
       </div>
