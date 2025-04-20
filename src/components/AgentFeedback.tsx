@@ -75,20 +75,26 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
           .delete()
           .match({ agent_id: agentId, user_id: user.id });
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error removing upvote:', error.message);
+          return;
+        }
         setUpvotes(prev => prev - 1);
         setHasUpvoted(false);
       } else {
         const { error } = await supabase
           .from('agent_upvotes')
-          .insert({ agent_id: agentId, user_id: user.id });
+          .insert([{ agent_id: agentId, user_id: user.id }]);
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error adding upvote:', error.message);
+          return;
+        }
         setUpvotes(prev => prev + 1);
         setHasUpvoted(true);
       }
     } catch (error) {
-      console.error('Error handling upvote:', error);
+      console.error('Error handling upvote:', error instanceof Error ? error.message : 'Unknown error');
     } finally {
       setIsLoading(false);
     }
