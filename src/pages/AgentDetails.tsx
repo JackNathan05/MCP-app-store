@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, FileText, Video } from "lucide-react";
 import DeployDropdown from "@/components/DeployDropdown";
 import { McpAgent } from "@/components/McpAgentCard";
+import { AgentFeedback } from "@/components/AgentFeedback";
 
 // Use the same static AGENTS array as on index
 const AGENTS: McpAgent[] = [
