@@ -11,8 +11,13 @@ interface Comment {
   created_at: string;
 }
 
-export function AgentFeedback({ agentId }: { agentId: string }) {
-  const { user, supabase } = useSupabaseAuth();
+interface AgentFeedbackProps {
+  agentId: string;
+  supabase: any;
+}
+
+export function AgentFeedback({ agentId, supabase }: AgentFeedbackProps) {
+  const { user } = useSupabaseAuth();
   const [upvotes, setUpvotes] = useState(0);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');

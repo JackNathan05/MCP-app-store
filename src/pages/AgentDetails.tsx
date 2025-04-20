@@ -168,7 +168,7 @@ const AgentDetails = () => {
           </div>
         </div>
       <div className="mt-8">
-          <AgentFeedback agentId={slugify(agent.name)} />
+          <AgentFeedback agentId={slugify(agent.name)} supabase={supabase} />
         </div>
       </div>
     </div>
