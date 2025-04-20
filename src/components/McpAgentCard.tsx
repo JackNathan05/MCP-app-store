@@ -1,5 +1,6 @@
 
 import { Star, User, LogIn, Github } from "lucide-react";
+import DeployDropdown from "./DeployDropdown";
 
 type McpAgent = {
   name: string;
@@ -59,13 +60,7 @@ const McpAgentCard = ({ agent }: Props) => {
         </div>
       </div>
       <div className="border-t border-gray-100 p-3 flex gap-2">
-        <button
-          className="bg-purple-600 text-white px-4 py-1 rounded-md font-medium text-sm shadow hover:bg-purple-700 transition w-full"
-          disabled
-          title="Deployment coming soon"
-        >
-          Deploy
-        </button>
+        <DeployDropdown github={agent.github} />
       </div>
     </div>
   );
@@ -73,4 +68,3 @@ const McpAgentCard = ({ agent }: Props) => {
 
 export type { McpAgent };
 export default McpAgentCard;
-
