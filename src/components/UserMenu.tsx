@@ -12,7 +12,7 @@ import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogOut, Dashboard, User } from "lucide-react";
+import { LogOut, LayoutDashboard, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const UserMenu: React.FC = () => {
@@ -57,7 +57,7 @@ export const UserMenu: React.FC = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link to="/dashboard" className="flex items-center gap-2">
-            <Dashboard className="h-4 w-4" />
+            <LayoutDashboard className="h-4 w-4" />
             Dashboard
           </Link>
         </DropdownMenuItem>

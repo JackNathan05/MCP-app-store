@@ -8,7 +8,7 @@ import SearchBar from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { UserMenu } from "@/components/UserMenu";
-import { Dashboard } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 
 const AGENTS: McpAgent[] = [
   {
@@ -141,7 +141,7 @@ export default function Index() {
           <>
             <Button asChild variant="outline" size="sm">
               <Link to="/dashboard" className="flex items-center gap-1">
-                <Dashboard className="w-4 h-4" /> Dashboard
+                <LayoutDashboard className="w-4 h-4" /> Dashboard
               </Link>
             </Button>
             <UserMenu />
