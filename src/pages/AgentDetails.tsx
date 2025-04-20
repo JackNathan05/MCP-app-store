@@ -4,6 +4,8 @@ import { ArrowLeft, FileText, Video } from "lucide-react";
 import DeployDropdown from "@/components/DeployDropdown";
 import { McpAgent } from "@/components/McpAgentCard";
 import { AgentFeedback } from "@/components/AgentFeedback";
+import { supabase } from "@/integrations/supabase/client";
+import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 
 const slugify = (text: string) => {
   return text.toLowerCase().replace(/\s+/g, "-");
@@ -69,6 +71,7 @@ const getAgentByName = (name: string | undefined) => {
 const AgentDetails = () => {
   const { name } = useParams();
   const navigate = useNavigate();
+  const { user } = useSupabaseAuth();
   const agent = getAgentByName(name);
 
   if (!agent) {
