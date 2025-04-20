@@ -1,0 +1,52 @@
+The above error occurred in the <AgentFeedback> component:
+
+    at AgentFeedback (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/src/components/AgentFeedback.tsx:15:33)
+    at div
+    at div
+    at div
+    at AgentDetails (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/src/pages/AgentDetails.tsx:94:22)
+    at ProtectedRoute (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/src/App.tsx:23:27)
+    at RenderedRoute (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=2c908b04:4069:5)
+    at Routes (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=2c908b04:4508:5)
+    at Router (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=2c908b04:4451:15)
+    at BrowserRouter (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=2c908b04:5196:5)
+    at Provider (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/chunk-YHOR7FC4.js?v=2c908b04:71:15)
+    at TooltipProvider (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=2c908b04:58:5)
+    at QueryClientProvider (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/@tanstack_react-query.js?v=2c908b04:2794:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+at AgentFeedback (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/src/components/AgentFeedback.tsx:15:33)
+at div
+at div
+at div
+at AgentDetails (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/src/pages/AgentDetails.tsx:94:22)
+at ProtectedRoute (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/src/App.tsx:23:27)
+at RenderedRoute (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=2c908b04:4069:5)
+at Routes (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=2c908b04:4508:5)
+at Router (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=2c908b04:4451:15)
+at BrowserRouter (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=2c908b04:5196:5)
+at Provider (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/chunk-YHOR7FC4.js?v=2c908b04:71:15)
+at TooltipProvider (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=2c908b04:58:5)
+at QueryClientProvider (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/@tanstack_react-query.js?v=2c908b04:2794:3)
+at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+at t.value (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+useEffect is not defined
+at AgentFeedback (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/src/components/AgentFeedback.tsx:23:5)
+at renderWithHooks (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/chunk-FJ2A54M7.js?v=2c908b04:11548:26)
+at mountIndeterminateComponent (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/chunk-FJ2A54M7.js?v=2c908b04:14926:21)
+at beginWork (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/chunk-FJ2A54M7.js?v=2c908b04:15914:22)
+at beginWork$1 (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/chunk-FJ2A54M7.js?v=2c908b04:19753:22)
+at performUnitOfWork (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/chunk-FJ2A54M7.js?v=2c908b04:19198:20)
+at workLoopSync (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/chunk-FJ2A54M7.js?v=2c908b04:19137:13)
+at renderRootSync (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/chunk-FJ2A54M7.js?v=2c908b04:19116:15)
+at recoverFromConcurrentError (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/chunk-FJ2A54M7.js?v=2c908b04:18736:28)
+at performConcurrentWorkOnRoot (https://ffa7cbc2-768f-4ca1-bc9c-72a84581a104-00-3e40zkvq5463z.riker.replit.dev/node_modules/.vite/deps/chunk-FJ2A54M7.js?v=2c908b04:18684
