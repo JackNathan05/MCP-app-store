@@ -7,7 +7,8 @@ import { AgentFeedback } from "@/components/AgentFeedback";
 import { supabase } from "@/integrations/supabase/client";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 
-const slugify = (text: string) => {
+const slugify = (text: string | undefined) => {
+  if (!text) return '';
   return text.toLowerCase().replace(/\s+/g, "-");
 };
 

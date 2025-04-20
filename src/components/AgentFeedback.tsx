@@ -23,6 +23,42 @@ export function AgentFeedback({ agentId, supabase }: AgentFeedbackProps) {
   const [newComment, setNewComment] = useState('');
   const [hasUpvoted, setHasUpvoted] = useState(false);
 
+  // Load initial data
+  useEffect(() => {
+    if (!user || !agentId) return;
+    
+    const loadData = async () => {
+      // Load upvotes count
+      const { data: upvoteData } = await supabase
+        .from('agent_upvotes')
+        .select('*')
+        .eq('agent_id', agentId);
+      
+      if (upvoteData) {
+        setUpvotes(upvoteData.length);
+        setHasUpvoted(upvoteData.some(vote => vote.user_id === user.id));
+      }
+
+      // Load comments
+      const { data: commentData } = await supabase
+        .from('agent_comments')
+        .select('*')
+        .eq('agent_id', agentId)
+        .order('created_at', { ascending: false });
+
+      if (commentData) {
+        setComments(commentData.map(comment => ({
+          id: comment.id,
+          user_email: comment.user_id,
+          content: comment.content,
+          created_at: comment.created_at
+        })));
+      }
+    };
+
+    loadData();
+  }, [user, agentId]);
+
   const handleUpvote = async () => {
     if (!user || !supabase) return;
     
