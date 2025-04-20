@@ -30,29 +30,34 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const { data: upvoteData, error: upvoteError } = await supabase
+        const { data: upvoteData } = await supabase
           .from('agent_upvotes')
           .select('*')
-        .eq('agent_id', agentId);
+          .eq('agent_id', agentId);
       
-      if (upvoteData) {
-        setUpvotes(upvoteData.length);
-        setHasUpvoted(upvoteData.some(vote => vote.user_id === user.id));
-      }
+        if (upvoteData) {
+          setUpvotes(upvoteData.length);
+          setHasUpvoted(upvoteData.some(vote => vote.user_id === user.id));
+        }
 
-      const { data: commentData } = await supabase
-        .from('agent_comments')
-        .select('*')
-        .eq('agent_id', agentId)
-        .order('created_at', { ascending: false });
+        const { data: commentData } = await supabase
+          .from('agent_comments')
+          .select('*')
+          .eq('agent_id', agentId)
+          .order('created_at', { ascending: false });
 
-      if (commentData) {
-        setComments(commentData.map(comment => ({
-          id: comment.id,
-          user_email: comment.user_id,
-          content: comment.content,
-          created_at: comment.created_at
-        })));
+        if (commentData) {
+          setComments(commentData.map(comment => ({
+            id: comment.id,
+            user_email: comment.user_id,
+            content: comment.content,
+            created_at: comment.created_at
+          })));
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -146,7 +151,7 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
           placeholder="Leave a comment..."
           className="min-h-[100px]"
         />
-        <Button onClick={handleComment}>Post Comment</Button>
+        <Button onClick={handleComment} disabled={isLoading}>Post Comment</Button>
       </div>
 
       <div className="space-y-4">
