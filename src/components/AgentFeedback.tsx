@@ -16,19 +16,17 @@ interface AgentFeedbackProps {
   agentId: string;
 }
 
-export function AgentFeedback({ agentId, supabase }: AgentFeedbackProps) {
+export function AgentFeedback({ agentId }: AgentFeedbackProps) {
   const { user } = useSupabaseAuth();
   const [upvotes, setUpvotes] = useState(0);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const [hasUpvoted, setHasUpvoted] = useState(false);
 
-  // Load initial data
   useEffect(() => {
     if (!user || !agentId) return;
     
     const loadData = async () => {
-      // Load upvotes count
       const { data: upvoteData } = await supabase
         .from('agent_upvotes')
         .select('*')
@@ -39,7 +37,6 @@ export function AgentFeedback({ agentId, supabase }: AgentFeedbackProps) {
         setHasUpvoted(upvoteData.some(vote => vote.user_id === user.id));
       }
 
-      // Load comments
       const { data: commentData } = await supabase
         .from('agent_comments')
         .select('*')
@@ -60,7 +57,7 @@ export function AgentFeedback({ agentId, supabase }: AgentFeedbackProps) {
   }, [user, agentId]);
 
   const handleUpvote = async () => {
-    if (!user || !supabase) return;
+    if (!user) return;
     
     try {
       const { error } = await supabase
@@ -77,7 +74,7 @@ export function AgentFeedback({ agentId, supabase }: AgentFeedbackProps) {
   };
 
   const handleComment = async () => {
-    if (!user || !supabase || !newComment.trim()) return;
+    if (!user || !newComment.trim()) return;
 
     try {
       const { error } = await supabase
