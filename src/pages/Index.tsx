@@ -1,4 +1,3 @@
-
 // MCP App Store Directory Page
 
 import { useState, useMemo } from "react";
@@ -6,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import McpAgentCard, { McpAgent } from "@/components/McpAgentCard";
 import TagFilter from "@/components/TagFilter";
 import SearchBar from "@/components/SearchBar";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const AGENTS: McpAgent[] = [
   {
@@ -60,7 +61,7 @@ const ALL_TAGS = Array.from(
   new Set(AGENTS.flatMap(agent => agent.tags))
 ).sort();
 
-const Index = () => {
+export default function Index() {
   const [search, setSearch] = useState("");
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const navigate = useNavigate();
@@ -132,11 +133,14 @@ const Index = () => {
           ))
         )}
       </div>
+      <div className="fixed top-2 right-2">
+        <Button asChild variant="outline" size="sm">
+          <Link to="/auth">Login / Sign Up</Link>
+        </Button>
+      </div>
       <footer className="mt-16 text-gray-400 text-xs text-center">
         &copy; {new Date().getFullYear()} MCP App Store — Open Source under MIT
       </footer>
     </div>
   );
-};
-
-export default Index;
+}
