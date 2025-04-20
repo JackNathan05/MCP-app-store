@@ -22,14 +22,17 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const [hasUpvoted, setHasUpvoted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!user || !agentId) return;
     
     const loadData = async () => {
-      const { data: upvoteData } = await supabase
-        .from('agent_upvotes')
-        .select('*')
+      setIsLoading(true);
+      try {
+        const { data: upvoteData, error: upvoteError } = await supabase
+          .from('agent_upvotes')
+          .select('*')
         .eq('agent_id', agentId);
       
       if (upvoteData) {
@@ -60,16 +63,32 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
     if (!user) return;
     
     try {
-      const { error } = await supabase
-        .from('agent_upvotes')
-        .upsert([{ agent_id: agentId, user_id: user.id }]);
+      setIsLoading(true);
+      if (hasUpvoted) {
+        const { error } = await supabase
+          .from('agent_upvotes')
+          .delete()
+          .eq('agent_id', agentId)
+          .eq('user_id', user.id);
 
-      if (!error) {
-        setUpvotes(prev => prev + 1);
-        setHasUpvoted(true);
+        if (!error) {
+          setUpvotes(prev => prev - 1);
+          setHasUpvoted(false);
+        }
+      } else {
+        const { error } = await supabase
+          .from('agent_upvotes')
+          .insert([{ agent_id: agentId, user_id: user.id }]);
+
+        if (!error) {
+          setUpvotes(prev => prev + 1);
+          setHasUpvoted(true);
+        }
       }
     } catch (error) {
-      console.error('Error upvoting:', error);
+      console.error('Error handling upvote:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,25 +96,30 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
     if (!user || !newComment.trim()) return;
 
     try {
-      const { error } = await supabase
+      setIsLoading(true);
+      const { data, error } = await supabase
         .from('agent_comments')
         .insert([{
           agent_id: agentId,
           user_id: user.id,
           content: newComment.trim()
-        }]);
+        }])
+        .select()
+        .single();
 
-      if (!error) {
+      if (!error && data) {
         setComments(prev => [...prev, {
-          id: Date.now().toString(),
+          id: data.id,
           user_email: user.email || '',
-          content: newComment,
-          created_at: new Date().toISOString()
+          content: data.content,
+          created_at: data.created_at
         }]);
         setNewComment('');
       }
     } catch (error) {
       console.error('Error posting comment:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -108,10 +132,10 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
       <div className="flex items-center gap-4">
         <Button 
           onClick={handleUpvote} 
-          disabled={hasUpvoted}
-          variant="outline"
+          disabled={isLoading}
+          variant={hasUpvoted ? "secondary" : "outline"}
         >
-          {hasUpvoted ? 'Upvoted' : 'Upvote'} ({upvotes})
+          {hasUpvoted ? '★ Upvoted' : '☆ Upvote'} ({upvotes})
         </Button>
       </div>
       
