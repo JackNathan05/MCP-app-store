@@ -162,6 +162,9 @@ const AgentDetails = () => {
             </p>
           </div>
         </div>
+      <div className="mt-8">
+          <AgentFeedback agentId={slugify(agent.name)} />
+        </div>
       </div>
     </div>
   );
