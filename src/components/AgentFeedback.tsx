@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSupabaseAuth } from '@/hooks/useSupabaseAuth';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Comment {
   id: string;
@@ -13,7 +14,6 @@ interface Comment {
 
 interface AgentFeedbackProps {
   agentId: string;
-  supabase: any;
 }
 
 export function AgentFeedback({ agentId, supabase }: AgentFeedbackProps) {
