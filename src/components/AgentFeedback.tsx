@@ -1,9 +1,8 @@
 
-import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ThumbsUp } from "lucide-react";
-import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
+import { useState } from 'react';
+import { useSupabaseAuth } from '@/hooks/useSupabaseAuth';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface Comment {
   id: string;
@@ -20,82 +19,81 @@ export function AgentFeedback({ agentId }: { agentId: string }) {
   const [hasUpvoted, setHasUpvoted] = useState(false);
 
   const handleUpvote = async () => {
-    if (!user) return;
+    if (!user || !supabase) return;
     
-    const { error } = await supabase
-      .from('agent_upvotes')
-      .upsert([{ agent_id: agentId, user_id: user.id }]);
+    try {
+      const { error } = await supabase
+        .from('agent_upvotes')
+        .upsert([{ agent_id: agentId, user_id: user.id }]);
 
-    if (!error) {
-      setUpvotes(prev => prev + 1);
-      setHasUpvoted(true);
+      if (!error) {
+        setUpvotes(prev => prev + 1);
+        setHasUpvoted(true);
+      }
+    } catch (error) {
+      console.error('Error upvoting:', error);
     }
   };
 
   const handleComment = async () => {
-    if (!user || !newComment.trim()) return;
+    if (!user || !supabase || !newComment.trim()) return;
 
-    const { error } = await supabase
-      .from('agent_comments')
-      .insert([{
-        agent_id: agentId,
-        user_id: user.id,
-        content: newComment.trim()
-      }]);
+    try {
+      const { error } = await supabase
+        .from('agent_comments')
+        .insert([{
+          agent_id: agentId,
+          user_id: user.id,
+          content: newComment.trim()
+        }]);
 
-    if (!error) {
-      setComments(prev => [...prev, {
-        id: Date.now().toString(),
-        user_email: user.email || '',
-        content: newComment,
-        created_at: new Date().toISOString()
-      }]);
-      setNewComment('');
+      if (!error) {
+        setComments(prev => [...prev, {
+          id: Date.now().toString(),
+          user_email: user.email || '',
+          content: newComment,
+          created_at: new Date().toISOString()
+        }]);
+        setNewComment('');
+      }
+    } catch (error) {
+      console.error('Error posting comment:', error);
     }
   };
+
+  if (!user) {
+    return <div className="text-sm text-gray-500">Please sign in to leave feedback</div>;
+  }
 
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
         <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={handleUpvote}
-          disabled={!user || hasUpvoted}
+          onClick={handleUpvote} 
+          disabled={hasUpvoted}
+          variant="outline"
         >
-          <ThumbsUp className={`w-4 h-4 mr-2 ${hasUpvoted ? 'text-blue-500' : ''}`} />
-          {upvotes} Upvotes
+          {hasUpvoted ? 'Upvoted' : 'Upvote'} ({upvotes})
         </Button>
       </div>
-
+      
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold">Comments</h3>
-        {user ? (
-          <div className="space-y-2">
-            <Textarea
-              placeholder="Share your thoughts..."
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-            />
-            <Button onClick={handleComment}>Post Comment</Button>
-          </div>
-        ) : (
-          <p className="text-sm text-muted-foreground">Sign in to leave a comment</p>
-        )}
+        <Textarea
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="Leave a comment..."
+          className="min-h-[100px]"
+        />
+        <Button onClick={handleComment}>Post Comment</Button>
+      </div>
 
-        <div className="space-y-4 mt-4">
-          {comments.map(comment => (
-            <div key={comment.id} className="border rounded-lg p-4">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-medium">{comment.user_email}</span>
-                <span className="text-sm text-muted-foreground">
-                  {new Date(comment.created_at).toLocaleDateString()}
-                </span>
-              </div>
-              <p className="text-sm">{comment.content}</p>
-            </div>
-          ))}
-        </div>
+      <div className="space-y-4">
+        {comments.map((comment) => (
+          <div key={comment.id} className="border rounded p-3">
+            <div className="text-sm text-gray-500 mb-1">{comment.user_email}</div>
+            <div>{comment.content}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
