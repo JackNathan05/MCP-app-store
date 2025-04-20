@@ -73,22 +73,19 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
         const { error } = await supabase
           .from('agent_upvotes')
           .delete()
-          .eq('agent_id', agentId)
-          .eq('user_id', user.id);
+          .match({ agent_id: agentId, user_id: user.id });
 
-        if (!error) {
-          setUpvotes(prev => prev - 1);
-          setHasUpvoted(false);
-        }
+        if (error) throw error;
+        setUpvotes(prev => prev - 1);
+        setHasUpvoted(false);
       } else {
         const { error } = await supabase
           .from('agent_upvotes')
-          .insert([{ agent_id: agentId, user_id: user.id }]);
+          .insert({ agent_id: agentId, user_id: user.id });
 
-        if (!error) {
-          setUpvotes(prev => prev + 1);
-          setHasUpvoted(true);
-        }
+        if (error) throw error;
+        setUpvotes(prev => prev + 1);
+        setHasUpvoted(true);
       }
     } catch (error) {
       console.error('Error handling upvote:', error);
