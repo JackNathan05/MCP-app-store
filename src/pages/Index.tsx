@@ -1,6 +1,8 @@
+
 // MCP App Store Directory Page
 
-import { useState, useMemo, useNavigate } from "react";
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import McpAgentCard, { McpAgent } from "@/components/McpAgentCard";
 import TagFilter from "@/components/TagFilter";
 import SearchBar from "@/components/SearchBar";
