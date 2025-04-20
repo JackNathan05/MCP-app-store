@@ -5,6 +5,10 @@ import DeployDropdown from "@/components/DeployDropdown";
 import { McpAgent } from "@/components/McpAgentCard";
 import { AgentFeedback } from "@/components/AgentFeedback";
 
+const slugify = (text: string) => {
+  return text.toLowerCase().replace(/\s+/g, "-");
+};
+
 // Use the same static AGENTS array as on index
 const AGENTS: McpAgent[] = [
   {
