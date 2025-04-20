@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AgentDetails from "./pages/AgentDetails";
 import AuthPage from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
 import { useSupabaseAuth } from "./hooks/useSupabaseAuth";
 
 const queryClient = new QueryClient();
@@ -33,6 +35,7 @@ const App = () => (
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/" element={<Index />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/agent/:name" element={<ProtectedRoute><AgentDetails /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

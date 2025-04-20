@@ -1,12 +1,14 @@
 // MCP App Store Directory Page
 
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import McpAgentCard, { McpAgent } from "@/components/McpAgentCard";
 import TagFilter from "@/components/TagFilter";
 import SearchBar from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
+import { UserMenu } from "@/components/UserMenu";
+import { Dashboard } from "lucide-react";
 
 const AGENTS: McpAgent[] = [
   {
@@ -65,6 +67,7 @@ export default function Index() {
   const [search, setSearch] = useState("");
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const navigate = useNavigate();
+  const { user, loading } = useSupabaseAuth();
 
   const filteredAgents = useMemo(() => {
     let list = AGENTS;
@@ -133,10 +136,21 @@ export default function Index() {
           ))
         )}
       </div>
-      <div className="fixed top-2 right-2">
-        <Button asChild variant="outline" size="sm">
-          <Link to="/auth">Login / Sign Up</Link>
-        </Button>
+      <div className="fixed top-2 right-2 flex gap-2 items-center z-50">
+        {!loading && user ? (
+          <>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/dashboard" className="flex items-center gap-1">
+                <Dashboard className="w-4 h-4" /> Dashboard
+              </Link>
+            </Button>
+            <UserMenu />
+          </>
+        ) : (
+          <Button asChild variant="outline" size="sm">
+            <Link to="/auth">Login / Sign Up</Link>
+          </Button>
+        )}
       </div>
       <footer className="mt-16 text-gray-400 text-xs text-center">
         &copy; {new Date().getFullYear()} MCP App Store — Open Source under MIT
