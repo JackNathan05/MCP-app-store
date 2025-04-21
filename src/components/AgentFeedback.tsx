@@ -17,6 +17,33 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
   const [comment, setComment] = useState("");
 
   useEffect(() => {
+    const initDb = async () => {
+      try {
+        // Create tables if they don't exist
+        await supabase.from('agent_upvotes').select('*').limit(1).catch(async () => {
+          const { error } = await supabase.from('agent_upvotes').insert([]);
+          if (error?.code === '42P01') {
+            await supabase.query(`
+              CREATE TABLE IF NOT EXISTS agent_upvotes (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                agent_id TEXT NOT NULL,
+                user_id UUID NOT NULL,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                UNIQUE(agent_id, user_id)
+              );
+              CREATE INDEX IF NOT EXISTS idx_agent_upvotes_agent_id ON agent_upvotes(agent_id);
+            `);
+          }
+        });
+      } catch (error) {
+        console.error('Error initializing database:', error);
+      }
+    };
+
+    initDb();
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
       if (!agentId) return;
 
