@@ -38,13 +38,10 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Execute the function and ensure we get a result
-DO $$ 
-BEGIN
-  IF NOT (SELECT init_agent_upvotes()) THEN
-    RAISE EXCEPTION 'Failed to initialize agent_upvotes';
-  END IF;
-END $$;
-$$ LANGUAGE plpgsql;
-
--- Execute the function once to ensure table exists
-SELECT init_agent_upvotes();
+-- Execute the function and return the result
+SELECT CASE 
+  WHEN init_agent_upvotes() THEN 
+    json_build_object('success', true)
+  ELSE 
+    json_build_object('success', false)
+END AS initialization_result;
