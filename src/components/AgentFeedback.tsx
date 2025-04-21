@@ -77,13 +77,12 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
         setHasUpvoted(true);
       }
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error handling upvote:', error.message);
-      } else if (typeof error === 'object' && error !== null) {
-        console.error('Error handling upvote:', JSON.stringify(error));
-      } else {
-        console.error('Error handling upvote:', error);
-      }
+      const errorMessage = error instanceof Error ? error.message : 
+        (typeof error === 'object' && error !== null) ? JSON.stringify(error) : String(error);
+      console.error('Error handling upvote:', errorMessage);
+      
+      // Show user-friendly error via toast or alert
+      alert(`Failed to save upvote: ${errorMessage}`);
       // Revert optimistic update
       setUpvotes(prev => hasUpvoted ? prev + 1 : prev - 1);
       setHasUpvoted(!hasUpvoted);
