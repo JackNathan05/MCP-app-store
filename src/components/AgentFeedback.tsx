@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,12 +19,12 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
   useEffect(() => {
     const fetchData = async () => {
       if (!agentId) return;
-      
+
       const { count } = await supabase
         .from('agent_upvotes')
         .select('*', { count: 'exact' })
         .eq('agent_id', agentId);
-      
+
       setUpvotes(count || 0);
 
       if (user) {
@@ -35,7 +34,7 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
           .eq('agent_id', agentId)
           .eq('user_id', user.id)
           .single();
-        
+
         setHasUpvoted(!!data);
       }
     };
@@ -45,10 +44,10 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
 
   const handleUpvote = async () => {
     if (!user || !agentId) return;
-    
+
     try {
       setIsLoading(true);
-      
+
       if (hasUpvoted) {
         const { error } = await supabase
           .from('agent_upvotes')
@@ -56,8 +55,10 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
           .eq('agent_id', agentId)
           .eq('user_id', user.id);
 
-        if (error) throw error;
-        
+        if (error) {
+          throw error;
+        }
+
         setUpvotes(prev => prev - 1);
         setHasUpvoted(false);
       } else {
@@ -68,8 +69,10 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
             user_id: user.id
           }]);
 
-        if (error) throw error;
-        
+        if (error) {
+          throw error;
+        }
+
         setUpvotes(prev => prev + 1);
         setHasUpvoted(true);
       }
