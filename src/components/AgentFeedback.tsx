@@ -16,6 +16,8 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [comment, setComment] = useState("");
 
+  const [isDbReady, setIsDbReady] = useState(false);
+
   useEffect(() => {
     const initDb = async () => {
       try {
@@ -28,11 +30,13 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
           .select('*', { count: 'exact', head: true });
           
         if (checkError) {
-          console.error('Table verification error:', checkError);
-          return;
+          throw new Error(`Table verification failed: ${checkError.message}`);
         }
+        
+        setIsDbReady(true);
       } catch (error) {
         console.error('Database initialization error:', error);
+        setIsDbReady(false);
       }
     };
 
@@ -140,7 +144,7 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
           variant="outline"
           size="sm"
           onClick={handleUpvote}
-          disabled={isLoading || !user}
+          disabled={isLoading || !user || !isDbReady}
         >
           <ThumbsUp
             size={16}
