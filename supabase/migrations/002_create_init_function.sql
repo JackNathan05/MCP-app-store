@@ -5,10 +5,6 @@ DROP FUNCTION IF EXISTS init_agent_upvotes();
 CREATE OR REPLACE FUNCTION init_agent_upvotes()
 RETURNS boolean AS $$
 BEGIN
-  -- Grant necessary permissions first
-  GRANT USAGE ON SCHEMA public TO postgres, anon, authenticated, service_role;
-  GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role;
-  
   -- Create table if it doesn't exist
   CREATE TABLE IF NOT EXISTS public.agent_upvotes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -23,6 +19,15 @@ BEGIN
 
   -- Always return true on successful execution
   RETURN true;
+EXCEPTION 
+  WHEN insufficient_privilege THEN
+    -- Grant necessary permissions and try again
+    EXECUTE 'GRANT USAGE ON SCHEMA public TO authenticated, anon';
+    EXECUTE 'GRANT ALL ON ALL TABLES IN SCHEMA public TO authenticated, anon';
+    RETURN init_agent_upvotes();
+  WHEN OTHERS THEN
+    RAISE NOTICE 'Error in init_agent_upvotes: %', SQLERRM;
+    RETURN false;
 END;
 $$ LANGUAGE plpgsql;
 
