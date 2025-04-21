@@ -19,22 +19,26 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
   useEffect(() => {
     const initDb = async () => {
       try {
-        const { data, error } = await supabase.rpc('init_agent_upvotes');
-        if (error) {
-          console.error('Database initialization error:', error.message);
-          alert(`Failed to initialize database: ${error.message}`);
-          return;
-        }
-        if (!data) {
-          console.error('Database initialization failed');
-          alert('Failed to initialize database. Please try again.');
-          return;
+        // First try to select from the table to check if it exists
+        const { error: checkError } = await supabase
+          .from('agent_upvotes')
+          .select('id')
+          .limit(1);
+
+        // If table doesn't exist, initialize it
+        if (checkError) {
+          const { data, error: initError } = await supabase.rpc('init_agent_upvotes');
+          if (initError) {
+            console.error('Database initialization error:', initError.message);
+            return;
+          }
+          if (!data) {
+            console.error('Database initialization failed');
+            return;
+          }
         }
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error';
-        console.error('Database initialization error:', message);
-        alert(`Failed to initialize database: ${message}`);
-        return;
+        console.error('Database initialization error:', error);
       }
     };
 
