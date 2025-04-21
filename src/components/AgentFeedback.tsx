@@ -19,9 +19,13 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
   useEffect(() => {
     const initDb = async () => {
       try {
-        await supabase.rpc('init_agent_upvotes');
+        const { data, error } = await supabase.rpc('init_agent_upvotes');
+        if (error) throw error;
+        if (!data) throw new Error('Failed to initialize database');
       } catch (error) {
         console.error('Database initialization error:', error);
+        alert('Failed to initialize database. Please try again.');
+        return;
       }
     };
 
