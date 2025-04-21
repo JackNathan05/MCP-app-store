@@ -104,12 +104,16 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
             agent_id: agentId,
             user_id: user.id
           }])
-          .select()
-          .single();
+          .select();
 
-        if (error || !data) {
-          console.error('Insert upvote error:', error);
-          throw new Error(error?.message || 'Failed to add upvote - no confirmation received');
+        if (error) {
+          console.error('Insert upvote error:', error.message);
+          throw new Error(`Failed to add upvote: ${error.message}`);
+        }
+
+        if (!data || data.length === 0) {
+          console.error('Insert upvote error: No data returned');
+          throw new Error('Failed to add upvote - no data returned');
         }
 
         setUpvotes(prev => prev + 1);
