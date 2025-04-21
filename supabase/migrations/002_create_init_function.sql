@@ -1,3 +1,4 @@
+
 -- Drop existing function if it exists
 DROP FUNCTION IF EXISTS init_agent_upvotes();
 
@@ -16,13 +17,10 @@ BEGIN
   -- Create index for better query performance
   CREATE INDEX IF NOT EXISTS idx_agent_upvotes_agent_id ON public.agent_upvotes(agent_id);
 
+  -- Always return true on successful execution
   RETURN true;
-EXCEPTION 
-  WHEN others THEN
-    RAISE NOTICE 'Error in init_agent_upvotes: %', SQLERRM;
-    RETURN false;
 END;
 $$ LANGUAGE plpgsql;
 
--- Execute the function immediately
+-- Execute the function once to ensure table exists
 SELECT init_agent_upvotes();
