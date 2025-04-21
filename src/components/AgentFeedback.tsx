@@ -19,24 +19,9 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
   useEffect(() => {
     const initDb = async () => {
       try {
-        // Try direct table creation if RPC fails
-        const { error: tableError } = await supabase.from('agent_upvotes').select('*').limit(1);
-        if (tableError?.code === '42P01') {
-          const { error: createError } = await supabase.query(`
-            CREATE TABLE IF NOT EXISTS public.agent_upvotes (
-              id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-              agent_id TEXT NOT NULL,
-              user_id UUID NOT NULL,
-              created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-              UNIQUE(agent_id, user_id)
-            );
-            CREATE INDEX IF NOT EXISTS idx_agent_upvotes_agent_id ON public.agent_upvotes(agent_id);
-          `);
-          if (createError) throw createError;
-        }
+        await supabase.rpc('init_agent_upvotes');
       } catch (error) {
         console.error('Database initialization error:', error);
-        alert('Failed to initialize database. Please try again later.');
       }
     };
 
