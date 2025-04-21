@@ -23,16 +23,16 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
       try {
         const { data, error } = await supabase.rpc('init_agent_upvotes');
         if (error) throw error;
-        
+
         // Verify table exists
         const { error: checkError } = await supabase
           .from('agent_upvotes')
           .select('*', { count: 'exact', head: true });
-          
+
         if (checkError) {
           throw new Error(`Table verification failed: ${checkError.message}`);
         }
-        
+
         setIsDbReady(true);
       } catch (error) {
         console.error('Database initialization error:', error);
@@ -83,7 +83,8 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
           .eq('user_id', user.id);
 
         if (error) {
-          throw error;
+          console.error('Delete upvote error:', error);
+          throw new Error(error.message || 'Failed to remove upvote');
         }
 
         setUpvotes(prev => prev - 1);
@@ -97,7 +98,8 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
           }]);
 
         if (error) {
-          throw error;
+          console.error('Insert upvote error:', error);
+          throw new Error(error.message || 'Failed to add upvote');
         }
 
         setUpvotes(prev => prev + 1);
