@@ -19,34 +19,23 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
   useEffect(() => {
     const initDb = async () => {
       try {
-        // First try to create the table via RPC
-        const { error: rpcError } = await supabase.rpc('init_agent_upvotes');
-        if (rpcError) {
-          console.error('RPC Error:', rpcError);
-          // Fallback to direct table creation
-          const { error: createError } = await supabase
-            .from('agent_upvotes')
-            .select('*')
-            .limit(1)
-            .catch(async () => {
-              return await supabase.query(`
-                CREATE TABLE IF NOT EXISTS public.agent_upvotes (
-                  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                  agent_id TEXT NOT NULL,
-                  user_id UUID NOT NULL,
-                  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-                  UNIQUE(agent_id, user_id)
-                );
-                CREATE INDEX IF NOT EXISTS idx_agent_upvotes_agent_id ON public.agent_upvotes(agent_id);
-              `);
-            });
-          if (createError) {
-            console.error('Create Error:', createError);
-          }
+        // Try direct table creation if RPC fails
+        const { error: tableError } = await supabase.from('agent_upvotes').select('*').limit(1);
+        if (tableError?.code === '42P01') {
+          const { error: createError } = await supabase.query(`
+            CREATE TABLE IF NOT EXISTS public.agent_upvotes (
+              id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+              agent_id TEXT NOT NULL,
+              user_id UUID NOT NULL,
+              created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+              UNIQUE(agent_id, user_id)
+            );
+            CREATE INDEX IF NOT EXISTS idx_agent_upvotes_agent_id ON public.agent_upvotes(agent_id);
+          `);
+          if (createError) throw createError;
         }
       } catch (error) {
-        const errorMsg = error instanceof Error ? error.message : JSON.stringify(error);
-        console.error('Database initialization error:', errorMsg);
+        console.error('Database initialization error:', error);
         alert('Failed to initialize database. Please try again later.');
       }
     };
@@ -118,7 +107,7 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
       const errorMessage = error instanceof Error ? error.message : 
         (typeof error === 'object' && error !== null) ? JSON.stringify(error) : String(error);
       console.error('Error handling upvote:', errorMessage);
-      
+
       // Show user-friendly error via toast or alert
       alert(`Failed to save upvote: ${errorMessage}`);
       // Revert optimistic update
