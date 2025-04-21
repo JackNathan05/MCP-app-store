@@ -13,11 +13,12 @@ BEGIN
       UNIQUE(agent_id, user_id)
     );
     
-    CREATE INDEX IF NOT EXISTS idx_agent_upvotes_agent_id ON agent_upvotes(agent_id);
+    CREATE INDEX IF NOT EXISTS idx_agent_upvotes_agent_id ON public.agent_upvotes(agent_id);
   END IF;
   RETURN true;
 EXCEPTION 
   WHEN others THEN
+    RAISE NOTICE 'Error creating agent_upvotes: %', SQLERRM;
     RETURN false;
 END;
 $$ LANGUAGE plpgsql;

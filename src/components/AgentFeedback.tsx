@@ -20,11 +20,20 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
     const initDb = async () => {
       try {
         const { data, error } = await supabase.rpc('init_agent_upvotes');
-        if (error) throw error;
-        if (!data) throw new Error('Failed to initialize database');
+        if (error) {
+          console.error('Database initialization error:', error.message);
+          alert(`Failed to initialize database: ${error.message}`);
+          return;
+        }
+        if (!data) {
+          console.error('Database initialization failed');
+          alert('Failed to initialize database. Please try again.');
+          return;
+        }
       } catch (error) {
-        console.error('Database initialization error:', error);
-        alert('Failed to initialize database. Please try again.');
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Database initialization error:', message);
+        alert(`Failed to initialize database: ${message}`);
         return;
       }
     };
