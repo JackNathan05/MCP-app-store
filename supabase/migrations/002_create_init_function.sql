@@ -23,6 +23,7 @@ BEGIN
   -- Create index for better query performance
   CREATE INDEX IF NOT EXISTS idx_agent_upvotes_agent_id ON public.agent_upvotes(agent_id);
 
+  -- Return a row to ensure proper confirmation
   RETURN true;
 EXCEPTION 
   WHEN insufficient_privilege THEN
@@ -34,6 +35,15 @@ EXCEPTION
     RAISE NOTICE 'Error in init_agent_upvotes: %', SQLERRM;
     RETURN false;
 END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Execute the function and ensure we get a result
+DO $$ 
+BEGIN
+  IF NOT (SELECT init_agent_upvotes()) THEN
+    RAISE EXCEPTION 'Failed to initialize agent_upvotes';
+  END IF;
+END $$;
 $$ LANGUAGE plpgsql;
 
 -- Execute the function once to ensure table exists
