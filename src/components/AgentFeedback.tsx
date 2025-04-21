@@ -21,26 +21,23 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
   useEffect(() => {
     const initDb = async () => {
       try {
-        // First try to verify if table exists
-        const { error: checkError } = await supabase
+        // Initialize tables first
+        const { data: initData, error: initError } = await supabase.rpc('init_agent_upvotes');
+        if (initError) {
+          throw new Error(`Failed to initialize database: ${initError.message}`);
+        }
+        
+        if (!initData) {
+          throw new Error('Database initialization returned no confirmation');
+        }
+
+        // Now verify the table
+        const { error: verifyError } = await supabase
           .from('agent_upvotes')
           .select('*', { count: 'exact', head: true });
 
-        if (checkError) {
-          // If table doesn't exist, initialize it
-          const { error: initError } = await supabase.rpc('init_agent_upvotes');
-          if (initError) {
-            throw new Error(`Failed to initialize database: ${initError.message}`);
-          }
-
-          // Verify again after initialization
-          const { error: verifyError } = await supabase
-            .from('agent_upvotes')
-            .select('*', { count: 'exact', head: true });
-
-          if (verifyError) {
-            throw new Error(`Table verification failed after init: ${verifyError.message}`);
-          }
+        if (verifyError) {
+          throw new Error(`Table verification failed: ${verifyError.message}`);
         }
 
         setIsDbReady(true);
@@ -101,16 +98,18 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
         setUpvotes(prev => prev - 1);
         setHasUpvoted(false);
       } else {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('agent_upvotes')
           .insert([{
             agent_id: agentId,
             user_id: user.id
-          }]);
+          }])
+          .select()
+          .single();
 
-        if (error) {
+        if (error || !data) {
           console.error('Insert upvote error:', error);
-          throw new Error(error.message || 'Failed to add upvote');
+          throw new Error(error?.message || 'Failed to add upvote - no confirmation received');
         }
 
         setUpvotes(prev => prev + 1);
