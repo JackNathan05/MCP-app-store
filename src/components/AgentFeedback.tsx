@@ -25,7 +25,7 @@ export function AgentFeedback({ agentId }: AgentFeedbackProps) {
         // Verify table exists
         const { error: checkError } = await supabase
           .from('agent_upvotes')
-          .select('count(*)');
+          .select('*', { count: 'exact', head: true });
           
         if (checkError) {
           console.error('Table verification error:', checkError);
